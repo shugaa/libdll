@@ -52,7 +52,7 @@ static const dll_error_description_t dll_errdesc[] = {
     {EDLLERROR, "Unspecified error"},
     {EDLLOK,    "No error"},
     {EDLLTILT,  "Iterator turnaround"},
-    {EDLLNOMEM, "Could not allocate memory"},
+    {EDLLNOMEM, "Not enough memory"},
     {EDLLINV,   "Invalid argument"},
 };
 static const char* dll_errdesc_unknown = "Unknown error";
