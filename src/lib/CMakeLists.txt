@@ -25,14 +25,14 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 set(libSrcs 
-	dll_list.c 
-	dll_iterator.c
-	dll_util.c)
+    dll_list.c 
+    dll_iterator.c
+    dll_util.c)
  
 add_library(dll SHARED ${libSrcs})
 
 install(TARGETS dll 
-	DESTINATION lib)
+    DESTINATION lib)
 install(DIRECTORY . 
-	DESTINATION include/dll
-	FILES_MATCHING REGEX "dll_([^_]+).h")
+    DESTINATION include/dll
+    FILES_MATCHING REGEX "dll_([^_]+).h")

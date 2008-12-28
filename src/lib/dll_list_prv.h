@@ -41,9 +41,9 @@
  * been put into dll_list.h */
 struct dll_item
 {
-	void* data;
-	dll_item_t* prev;
-	dll_item_t* next;
+    void* data;
+    dll_item_t* prev;
+    dll_item_t* next;
 };
 
 /* ######################################################################### */

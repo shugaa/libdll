@@ -27,12 +27,12 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 set(testappSrcs 
-	dll_testcase.c)
+    dll_testcase.c)
 
 add_executable(dlltest ${testappSrcs})
  
 target_link_libraries(dlltest 
-	dll
-	cunit)
+    dll
+    cunit)
 
 install(TARGETS dlltest DESTINATION bin)

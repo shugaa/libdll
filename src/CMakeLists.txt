@@ -33,10 +33,10 @@ endif(COMMAND cmake_policy)
 project(libdll)
 
 set (CMAKE_C_FLAGS_DEBUG 
-	"${CMAKE_C_FLAGS_DEBUG} -Werror -Wall")
+    "${CMAKE_C_FLAGS_DEBUG} -Werror -Wall")
 
 add_subdirectory(lib)
 
 IF (DLL_WITH_TESTS)
-	add_subdirectory(test)
+    add_subdirectory(test)
 ENDIF (DLL_WITH_TESTS)

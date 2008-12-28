@@ -46,87 +46,87 @@
 /* ######################################################################### */
 int dll_iterator_new(dll_iterator_t* iterator, dll_list_t* list)
 {
-	if (!iterator)
-		return EDLLINV;
-	if (!list)
-		return EDLLINV;	
+    if (!iterator)
+        return EDLLINV;
+    if (!list)
+        return EDLLINV; 
 
-	/* Initialize the iterator */
-	iterator->initialized = 0;
-	iterator->list = list;
-	iterator->item = NULL;
-	
-	return EDLLOK;
+    /* Initialize the iterator */
+    iterator->initialized = 0;
+    iterator->list = list;
+    iterator->item = NULL;
+    
+    return EDLLOK;
 }
 
 int dll_iterator_next(dll_iterator_t* iterator, void** data)
 {
-	int ret = EDLLOK;
+    int ret = EDLLOK;
 
-	if (!iterator)
-		return EDLLINV;
-	if (!data)
-		return EDLLINV;
+    if (!iterator)
+        return EDLLINV;
+    if (!data)
+        return EDLLINV;
 
-	if (!iterator->initialized) {
-		iterator->initialized = 1;
-		iterator->item = iterator->list->first;
-	} else {
-		if (iterator->item == iterator->list->last) {
-			iterator->item = iterator->list->first;
-			ret = EDLLTILT;
-		} else if (iterator->item != NULL) {
-			iterator->item = iterator->item->next;
-		}
-	}
-	
-	if (iterator->item == NULL)
-		return EDLLERROR;
+    if (!iterator->initialized) {
+        iterator->initialized = 1;
+        iterator->item = iterator->list->first;
+    } else {
+        if (iterator->item == iterator->list->last) {
+            iterator->item = iterator->list->first;
+            ret = EDLLTILT;
+        } else if (iterator->item != NULL) {
+            iterator->item = iterator->item->next;
+        }
+    }
+    
+    if (iterator->item == NULL)
+        return EDLLERROR;
 
-	*data = iterator->item->data;
-	
-	return ret;
+    *data = iterator->item->data;
+    
+    return ret;
 }
 
 int dll_iterator_prev(dll_iterator_t* iterator, void** data)
 {
-	int ret = EDLLOK;
+    int ret = EDLLOK;
 
-	if (!iterator)
-		return EDLLINV;
-	if (!data)
-		return EDLLINV;
+    if (!iterator)
+        return EDLLINV;
+    if (!data)
+        return EDLLINV;
 
-	if (!iterator->initialized) {
-		iterator->initialized = 1;
-		iterator->item = iterator->list->last;
-	} else
-	{
-		if (iterator->item == iterator->list->first) {
-			iterator->item = iterator->list->last;
-			ret = EDLLTILT;
-		} else if (iterator->item != NULL) {
-			iterator->item = iterator->item->prev;
-		}
-	}
-	
-	if (iterator->item == NULL)
-		return EDLLERROR;
-	
-	*data = iterator->item->data;
-	
-	return ret;
+    if (!iterator->initialized) {
+        iterator->initialized = 1;
+        iterator->item = iterator->list->last;
+    } else
+    {
+        if (iterator->item == iterator->list->first) {
+            iterator->item = iterator->list->last;
+            ret = EDLLTILT;
+        } else if (iterator->item != NULL) {
+            iterator->item = iterator->item->prev;
+        }
+    }
+    
+    if (iterator->item == NULL)
+        return EDLLERROR;
+    
+    *data = iterator->item->data;
+    
+    return ret;
 }
 
 int dll_iterator_free(dll_iterator_t* iterator)
-{	
-	if (!iterator)
-		return EDLLINV;
+{   
+    if (!iterator)
+        return EDLLINV;
 
-	/* Set some reasonable values */
-	iterator->initialized = 0;
-	iterator->list = NULL;
-	iterator->item = NULL;
-	
-	return EDLLOK;
+    /* Set some reasonable values */
+    iterator->initialized = 0;
+    iterator->list = NULL;
+    iterator->item = NULL;
+    
+    return EDLLOK;
 }

@@ -45,7 +45,7 @@
  *
  * @param errcode    Error code
  *
- * @return 			 Pointer to description string
+ * @return           Pointer to description string
  */
 char* dll_strerror(int errnum);
 
@@ -55,11 +55,11 @@ char* dll_strerror(int errnum);
  * to write your own comparator functions for arbitrary data types.
  *
  * @param item1      Pointer to first item
- * @param item2		 Pointer to second item
+ * @param item2      Pointer to second item
  *
- * @return 0		 item1 == item2
- *         1		 item1 > item2
- *         -1		 item1 < item2
+ * @return 0         item1 == item2
+ *         1         item1 > item2
+ *         -1        item1 < item2
  */
 int dll_compar_int(const void* item1, const void* item2);
 

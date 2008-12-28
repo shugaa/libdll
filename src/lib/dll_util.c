@@ -37,8 +37,8 @@
 /*                            Types & Defines                                */
 /* ######################################################################### */
 typedef struct {
-	  int error_code;
-      const char* desc;
+    int error_code;
+    const char* desc;
 } dll_error_description_t;
 
 /* ######################################################################### */
@@ -49,43 +49,43 @@ typedef struct {
 /*                           Implementation                                  */
 /* ######################################################################### */
 static const dll_error_description_t dll_errdesc[] = {
-	{EDLLERROR, "Unspecified error"},
-	{EDLLOK,    "No error"},
-	{EDLLTILT,  "Iterator turnaround"},
-	{EDLLNOMEM, "Could not allocate memory"},
-	{EDLLINV,   "Invalid argument"},
+    {EDLLERROR, "Unspecified error"},
+    {EDLLOK,    "No error"},
+    {EDLLTILT,  "Iterator turnaround"},
+    {EDLLNOMEM, "Could not allocate memory"},
+    {EDLLINV,   "Invalid argument"},
 };
 static const char* dll_errdesc_unknown = "Unknown error";
 
 
 char* dll_strerror(int errnum)
 {
-	int i;
-	int items = sizeof(dll_errdesc)/sizeof(dll_error_description_t);
+    int i;
+    int items = sizeof(dll_errdesc)/sizeof(dll_error_description_t);
 
-	/* Go through the list and try to find a matching error code */
-	for (i=0;i<items;i++) {
-		if (dll_errdesc[i].error_code == errnum) {
-			return (char*)dll_errdesc[i].desc;
-		}
-	}
+    /* Go through the list and try to find a matching error code */
+    for (i=0;i<items;i++) {
+        if (dll_errdesc[i].error_code == errnum) {
+            return (char*)dll_errdesc[i].desc;
+        }
+    }
 
-	/* Not found, return a generic string */
-	return (char*)dll_errdesc_unknown;
+    /* Not found, return a generic string */
+    return (char*)dll_errdesc_unknown;
 }
 
 int dll_compar_int(const void* item1, const void* item2)
 {
-	int int1 = *((int*)item1);
-	int	int2 = *((int*)item2);
+    int int1 = *((int*)item1);
+    int int2 = *((int*)item2);
 
-	if (int1 > int2)
-		return 1;
+    if (int1 > int2)
+        return 1;
 
-	if (int1 < int2)
-		return -1;
+    if (int1 < int2)
+        return -1;
 
-	return 0;
+    return 0;
 }
 
 

@@ -40,11 +40,11 @@
 /*                            Types & Defines                                */
 /* ######################################################################### */
 
-#define EDLLERROR	0	/* General error */
-#define EDLLOK		1	/* Success */
-#define EDLLTILT	2	/* Iterator turnaround */
-#define EDLLNOMEM	3	/* Unable to allocate enough memory */
-#define EDLLINV		4	/* Invalid argument */
+#define EDLLERROR   0   /* General error */
+#define EDLLOK      1   /* Success */
+#define EDLLTILT    2   /* Iterator turnaround */
+#define EDLLNOMEM   3   /* Unable to allocate enough memory */
+#define EDLLINV     4   /* Invalid argument */
 
 typedef struct dll_item dll_item_t;
 typedef struct dll_list dll_list_t;
@@ -52,16 +52,16 @@ typedef struct dll_iterator dll_iterator_t;
 
 struct dll_list
 {
-	unsigned int count;
-	dll_item_t* first;
-	dll_item_t* last;
+    unsigned int count;
+    dll_item_t* first;
+    dll_item_t* last;
 };
 
 struct dll_iterator
 {
-	char initialized;
-	dll_item_t* item;
-	dll_list_t* list;
+    char initialized;
+    dll_item_t* item;
+    dll_list_t* list;
 };
 
 typedef int(*dll_fctcompare_t)(const void*, const void*);
@@ -93,7 +93,7 @@ int dll_new(dll_list_t* list);
  * @param list       Pointer to the list
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_free(dll_list_t* list);
@@ -106,7 +106,7 @@ int dll_free(dll_list_t* list);
  * @param list       Pointer to the list
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_clear(dll_list_t* list);
@@ -118,7 +118,7 @@ int dll_clear(dll_list_t* list);
  * @param datasize   Size of memory to be allocated for this item's data    
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_append(dll_list_t* list, void** data, size_t datasize);
@@ -132,7 +132,7 @@ int dll_append(dll_list_t* list, void** data, size_t datasize);
  * @param lext       Pointer to extension list
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_extend(dll_list_t* list, dll_list_t* lext);
@@ -145,7 +145,7 @@ int dll_extend(dll_list_t* list, dll_list_t* lext);
  * @param position   Position in the list to insert the new item (starts with 0)
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int position);
@@ -156,7 +156,7 @@ int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int posi
  * @param position   Position of the item to be removed
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_remove(dll_list_t* list, unsigned int position);
@@ -168,7 +168,7 @@ int dll_remove(dll_list_t* list, unsigned int position);
  * @param position   Position in the list of the requested item
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_get(dll_list_t* list, void** data, unsigned int position);
@@ -179,7 +179,7 @@ int dll_get(dll_list_t* list, void** data, unsigned int position);
  * @param count      Pointer to an unsigned int to store the count in
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_count(dll_list_t* list, unsigned int* count);
@@ -191,7 +191,7 @@ int dll_count(dll_list_t* list, unsigned int* count);
  * @param compar     Pointer to function comparing two data items
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_sort(dll_list_t* list, dll_fctcompare_t compar);
@@ -201,10 +201,10 @@ int dll_sort(dll_list_t* list, dll_fctcompare_t compar);
  *
  * @param list       List to be searched
  * @param compar     Pointer to function comparing two data items
- * @param cmpitem    pointer to an item to compare to	     
+ * @param cmpitem    pointer to an item to compare to        
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong / Item not found
  */
 int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsigned int *index);
@@ -227,7 +227,7 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
  * @param list       Pointer to dll_list_t for which the iterator is to be created
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_iterator_new(dll_iterator_t* iterator, dll_list_t* list);
@@ -238,7 +238,7 @@ int dll_iterator_new(dll_iterator_t* iterator, dll_list_t* list);
  * @param data       Storage for the reference to this item's data
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLTILT  Iterator turnaround (jump from last to first item)
  *         EDLLERROR Something went wrong
  */
@@ -250,7 +250,7 @@ int dll_iterator_next(dll_iterator_t* iterator, void** data);
  * @param data       Storage for the reference to this item's data
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLTILT  Iterator turnaround (jump from first to last item)
  *         EDLLERROR Something went wrong
  */
@@ -261,7 +261,7 @@ int dll_iterator_prev(dll_iterator_t* iterator, void** data);
  * @param iterator   The iterator to be freed
  *
  * @return EDLLOK    No errors occured
- * 	       EDLLINV   An invalid argument has been passed
+ *         EDLLINV   An invalid argument has been passed
  *         EDLLERROR Something went wrong
  */
 int dll_iterator_free(dll_iterator_t* iterator);
