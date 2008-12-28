@@ -270,8 +270,6 @@ int dll_remove(dll_list_t* list, unsigned int position)
     /* Basic secrity precautions */
     if (!list)
         return EDLLINV;
-    if (list->count == 0)
-        return EDLLINV;
     if (position >= list->count)
         return EDLLINV;
 
