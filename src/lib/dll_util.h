@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008, Björn Rehm
+* Copyright (c) 2008, Björn Rehm (bjoern@shugaa.de)
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or without
