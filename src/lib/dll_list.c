@@ -336,6 +336,11 @@ int dll_count(dll_list_t* list, unsigned int* count)
 
 int dll_sort(dll_list_t* list, dll_fctcompare_t compar)
 {
+    if (!list)
+        return EDLLINV;
+    if (!compar)
+        return EDLLINV;
+
     return dll_quicksort(list, compar, list->count-1, 0);
 }
 
