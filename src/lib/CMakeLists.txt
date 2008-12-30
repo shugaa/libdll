@@ -33,6 +33,13 @@ add_library(dll SHARED ${libSrcs})
 
 install(TARGETS dll 
     DESTINATION lib)
-install(DIRECTORY . 
-    DESTINATION include/dll
-    FILES_MATCHING REGEX "dll_([^_]+).h")
+
+# Requires CMAKE 2.6, so we won't be using it for now although it makes stuff a
+# little bit simpler
+#install(DIRECTORY . 
+#    DESTINATION include/dll
+#    FILES_MATCHING REGEX "dll_([^_]+).h")
+
+# Instead just install the needed header files "manually"
+install(FILES dll_list.h DESTINATION include/dll)
+install(FILES dll_util.h DESTINATION include/dll)

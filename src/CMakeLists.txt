@@ -24,7 +24,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 2.6)
+# Not requiring version 2.6 anymore
+#cmake_minimum_required(VERSION 2.6)
 
 if(COMMAND cmake_policy)
       cmake_policy(SET CMP0003 NEW)
@@ -37,6 +38,7 @@ set (CMAKE_C_FLAGS_DEBUG
 
 add_subdirectory(lib)
 
+# TODO: We should find a way to make sure CUnit is actualy installed.
 IF (DLL_WITH_TESTS)
     add_subdirectory(test)
 ENDIF (DLL_WITH_TESTS)
