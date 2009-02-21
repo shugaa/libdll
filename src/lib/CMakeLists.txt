@@ -41,5 +41,5 @@ install(TARGETS dll
 #    FILES_MATCHING REGEX "dll_([^_]+).h")
 
 # Instead just install the needed header files "manually"
-install(FILES dll_list.h DESTINATION include/dll)
-install(FILES dll_util.h DESTINATION include/dll)
+install(FILES dll_list.h DESTINATION include/)
+install(FILES dll_util.h DESTINATION include/)
