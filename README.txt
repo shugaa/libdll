@@ -46,14 +46,11 @@ be too hard either.
 4. Update your dynamic linker
 
     You might need to change the ld configuration to include any custom install
-    prefix/lib directories.
-
-        ldconfig
+    prefix/lib directories and rerun ldconfig.
 
 5. Using libdll
+    
+    API documentation can be found in the packages doc/ directory.
 
-    test/dll_testcase.c should give you a pretty good impression of how to use
-    the library. The header files dll_list.h and dll_util.h are reasonably well
-    documented, too. 
-    You should even be able to run doxygen against the code to produce some
-    usable documentation.
+    Also, test/dll_testcase.c should give you a pretty good impression of how to
+    use the library.

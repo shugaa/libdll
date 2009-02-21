@@ -26,6 +26,12 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/** @file dll_list_prv.h
+ *
+ * @brief Private library interface
+ *
+ * */
+
 #ifndef _DLL_LIST_PRV_H
 #define _DLL_LIST_PRV_H
 
@@ -37,8 +43,8 @@
 /*                            Types & Defines                                */
 /* ######################################################################### */
 
-/* dll_item implementation can be hidden from the client, that's why it's not
- * been put into dll_list.h */
+/** The dll_item implementation can be hidden from the client, that's why it's
+ * not been put into dll_list.h */
 struct dll_item
 {
     void* data;
@@ -49,7 +55,11 @@ struct dll_item
 /* ######################################################################### */
 /*                           Private interface (Lib)                         */
 /* ######################################################################### */
+
+/** Reimplement this function to use your own memory management */
 void *dll_mem_alloc(size_t size);
+
+/** Reimplement this function to use your own memory management */
 void dll_mem_free(void *ptr);
 
 #endif // _DLL_LIST_PRV_H

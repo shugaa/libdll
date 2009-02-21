@@ -26,6 +26,12 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/** @file dll_util.h
+ *
+ * @brief Library utility functions
+ *
+ * */
+
 #ifndef _DLL_UTIL_H
 #define _DLL_UTIL_H
 
@@ -58,8 +64,8 @@ char* dll_strerror(int errnum);
  * @param item2      Pointer to second item
  *
  * @return 0         item1 == item2
- *         1         item1 > item2
- *         -1        item1 < item2
+ * @return 1         item1 > item2
+ * @return -1        item1 < item2
  */
 int dll_compar_int(const void* item1, const void* item2);
 
