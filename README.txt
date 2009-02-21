@@ -1,7 +1,7 @@
-libdll is a doubly linked list implementation in C. Here's some instructions on
-how to build and install it. I have tested this on Linux but it should work on
-pretty much any Unix like operating system. Porting it to something else won't
-be too hard either.
+libdll is a small and portable, yet feature rich doubly linked list
+implementation in C. Here's some instructions on how to build and install it. I
+have tested this on Linux but it should work on pretty much any Unix like
+operating system. Also it should be rather easy to port to something else.
 
 1. Create Makefiles (cmake needed)
     
