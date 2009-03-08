@@ -2,19 +2,20 @@ Here's some instructions on how to build and install libdll.
 
 1. Create Makefiles (cmake needed)
     
-    If you want to install into a non-standard location you can use the
-    CMAKE_INSTALL_PREFIX cmake option to change the destination:
+    If you want to install into a non-standard location you can modify the
+    CMAKE_INSTALL_PREFIX cmake cache entry to change the destination using the
+    following cmake parameter:
 
         -DCMAKE_INSTALL_PREFIX:PATH=/opt/libdll
 
-    You can use this cmake option to build with or without tests. You will need
-    to have cunit (http://cunit.sourceforge.net/) installed in order to use
-    this:
+    You might want to tell cmake if you'd like to build tests or not. You will
+    need to have cunit (http://cunit.sourceforge.net/) installed in order to use
+    this, otherwise your build will fail:
 
         -DDLL_WITH_TESTS:BOOL=TRUE
 
-    I would suggest building out of tree, so you might want to make yourself a
-    build directory somewhere:
+    I would suggest building out of tree, so make yourself a build directory
+    somewhere:
 
         mkdir build
         cd build
@@ -38,11 +39,5 @@ Here's some instructions on how to build and install libdll.
 
     There is no need to install if for instance you just want to run dlltest.
     cmake will set everything up accordingly. Just go ahead and run test/dlltest
-    from the build direcotry.
-    I would suggest to do so before installing anyway. 
-
-4. Update your dynamic linker
-
-    You might need to change the ld configuration to include any custom install
-    prefix/lib directories and rerun ldconfig.
+    from the build direcotry. I would suggest to do so before installing anyway. 
 
