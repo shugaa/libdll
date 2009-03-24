@@ -73,23 +73,12 @@ int dll_new(dll_list_t* list)
 
 int dll_free(dll_list_t* list)
 {
-    int rc;
-
     /* Try to make sure we were passed some kind of valid pointer */
     if (!list)
         return EDLLINV;
 
     /* Free all items. */
-    rc = dll_clear(list);
-    if (rc != EDLLOK)
-        return rc;
-
-    /* Init the list with some reasonable values */
-    list->count = 0;
-    list->first = NULL;
-    list->last = NULL;
-
-    return EDLLOK;
+    return dll_clear(list);
 }
 
 int dll_clear(dll_list_t* list)
