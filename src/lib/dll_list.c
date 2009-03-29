@@ -71,16 +71,6 @@ int dll_new(dll_list_t* list)
     return EDLLOK;
 }
 
-int dll_free(dll_list_t* list)
-{
-    /* Try to make sure we were passed some kind of valid pointer */
-    if (!list)
-        return EDLLINV;
-
-    /* Free all items. */
-    return dll_clear(list);
-}
-
 int dll_clear(dll_list_t* list)
 {
     unsigned int i;
