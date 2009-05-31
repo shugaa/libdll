@@ -54,11 +54,11 @@
 /*                            Types & Defines                                */
 /* ######################################################################### */
 
-#define EDLLERROR   0   /* General error */
-#define EDLLOK      1   /* Success */
-#define EDLLTILT    2   /* Iterator turnaround */
-#define EDLLNOMEM   3   /* Unable to allocate enough memory */
-#define EDLLINV     4   /* Invalid argument */
+#define EDLLERROR   (0)   /* General error */
+#define EDLLOK      (1)   /* Success */
+#define EDLLTILT    (2)   /* Iterator turnaround */
+#define EDLLNOMEM   (3)   /* Unable to allocate enough memory */
+#define EDLLINV     (4)   /* Invalid argument */
 
 /** List item type */
 typedef struct dll_item dll_item_t;
@@ -78,7 +78,7 @@ struct dll_list
 
 struct dll_iterator
 {
-    char initialized;
+    int flags;
     dll_item_t* item;
     dll_list_t* list;
 };
@@ -286,4 +286,4 @@ int dll_iterator_prev(dll_iterator_t* iterator, void** data);
  */
 int dll_iterator_free(dll_iterator_t* iterator);
 
-#endif // _DLL_LIST_H
+#endif /* _DLL_LIST_H */

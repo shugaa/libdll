@@ -42,6 +42,10 @@
 /* ######################################################################### */
 static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, int hi, int lo);
 
+/* Reimplement these for custom memory management */
+static void *dll_mem_alloc(size_t size);
+static void dll_mem_free(void *ptr);
+
 /* ######################################################################### */
 /*                           Implementation                                  */
 /* ######################################################################### */
@@ -436,12 +440,12 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, int hi, int 
     return EDLLOK;
 }
 
-void *dll_mem_alloc(size_t size)
+static void *dll_mem_alloc(size_t size)
 {
     return malloc(size);
 }
 
-void dll_mem_free(void *ptr)
+static void dll_mem_free(void *ptr)
 {
     free(ptr);
 }

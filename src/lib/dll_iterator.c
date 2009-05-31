@@ -37,6 +37,8 @@
 /*                            Types & Defines                                */
 /* ######################################################################### */
 
+#define DLL_ITERATOR_INIT       (1<<0)
+
 /* ######################################################################### */
 /*                           Private interface (Module)                      */
 /* ######################################################################### */
@@ -52,7 +54,7 @@ int dll_iterator_new(dll_iterator_t* iterator, dll_list_t* list)
         return EDLLINV; 
 
     /* Initialize the iterator */
-    iterator->initialized = 0;
+    iterator->flags = 0;
     iterator->list = list;
     iterator->item = NULL;
     
@@ -68,8 +70,8 @@ int dll_iterator_next(dll_iterator_t* iterator, void** data)
     if (!data)
         return EDLLINV;
 
-    if (!iterator->initialized) {
-        iterator->initialized = 1;
+    if ((iterator->flags & DLL_ITERATOR_INIT) < DLL_ITERATOR_INIT) {
+        iterator->flags = DLL_ITERATOR_INIT;
         iterator->item = iterator->list->first;
     } else {
         if (iterator->item == iterator->list->last) {
@@ -97,8 +99,8 @@ int dll_iterator_prev(dll_iterator_t* iterator, void** data)
     if (!data)
         return EDLLINV;
 
-    if (!iterator->initialized) {
-        iterator->initialized = 1;
+    if ((iterator->flags & DLL_ITERATOR_INIT) < DLL_ITERATOR_INIT) {
+        iterator->flags = DLL_ITERATOR_INIT;
         iterator->item = iterator->list->last;
     } else
     {
@@ -124,9 +126,10 @@ int dll_iterator_free(dll_iterator_t* iterator)
         return EDLLINV;
 
     /* Set some reasonable values */
-    iterator->initialized = 0;
+    iterator->flags = 0;
     iterator->list = NULL;
     iterator->item = NULL;
     
     return EDLLOK;
 }
+

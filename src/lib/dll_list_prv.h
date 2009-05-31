@@ -56,10 +56,4 @@ struct dll_item
 /*                           Private interface (Lib)                         */
 /* ######################################################################### */
 
-/** Reimplement this function to use your own memory management */
-void *dll_mem_alloc(size_t size);
-
-/** Reimplement this function to use your own memory management */
-void dll_mem_free(void *ptr);
-
-#endif // _DLL_LIST_PRV_H
+#endif /* _DLL_LIST_PRV_H */

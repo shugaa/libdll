@@ -69,4 +69,4 @@ char* dll_strerror(int errnum);
  */
 int dll_compar_int(const void* item1, const void* item2);
 
-#endif // _DLL_UTIL_H
+#endif /* _DLL_UTIL_H */
