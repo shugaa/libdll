@@ -170,7 +170,7 @@ int dll_extend(dll_list_t* list, dll_list_t* lext);
  */
 int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int position);
 
-/** Remove a specific item from te list
+/** Remove a specific item from the list
  *
  * @param list       Pointer to the list
  * @param position   Position of the item to be removed
