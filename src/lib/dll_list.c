@@ -445,8 +445,10 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
         }
 
         /* Recurse the two partitions that have been created */
-        dll_quicksort(list, compar, lo, downidx-1);
-        dll_quicksort(list, compar, downidx+1, hi);
+        if (lo != downidx)
+                dll_quicksort(list, compar, lo, downidx-1);
+        if (hi != downidx)
+                dll_quicksort(list, compar, downidx+1, hi);
 
         return EDLLOK;
 }
