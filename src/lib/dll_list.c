@@ -394,7 +394,7 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
         pivotitem = upit.item;
 
         for(;;) {
-                void* datatmp = NULL;
+                void *datatmp = NULL;
 
                 /* Move up 'pointer' to an element >pivot */
                 for(;;) {
@@ -425,7 +425,7 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                 if (upidx < downidx) {
                         /* If the two pointers have not passed each other
                          * exchange their values. */
-                        void *datatmp = datalo;
+                        datatmp = datalo;
                         downit.item->data = datalo;
                         upit.item->data = datahi;
 
@@ -436,7 +436,7 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                 } else {
                         /* Otherwise exchange pivot and the value downidx is
                          * pointing to */
-                        void *datatmp = downit.item->data;
+                        datatmp = downit.item->data;
                         downit.item->data = pivotitem->data;
                         pivotitem->data = datatmp;
 
