@@ -256,7 +256,7 @@ int dll_remove(dll_list_t* list, unsigned int position)
         if (position >= list->count)
                 return EDLLINV;
 
-        /* Seek to item position, which is prev for your new item */
+        /* Seek to item position */
         itemseek = list->first; 
         for (i=0; i<position; i++)
                 itemseek = itemseek->next;
@@ -355,6 +355,46 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
         return EDLLERROR;
 }
 
+int dll_reverse(dll_list_t *list)
+{
+        unsigned int upidx, downidx;
+        dll_iterator_t upit, downit;
+        void *datahi, *datalo;
+
+        if (!list)
+                return EDLLINV;
+        if (list->count <= 1)
+                return EDLLOK;
+
+        /* Create up and down iterators and move them to the first and last item
+         * respectively */
+        dll_iterator_new(&upit, list);
+        dll_iterator_new(&downit, list);
+        dll_iterator_next(&upit, &datalo);
+        dll_iterator_prev(&downit, &datahi);
+
+        upidx = 0;
+        downidx = list->count-1;
+
+        do {
+                /* Replace up and down elements and move the iterators to the
+                 * next elements */
+                void *datatmp = upit.item->data;
+                upit.item->data = downit.item->data;
+                downit.item->data = datatmp;
+
+                dll_iterator_next(&upit, &datalo);
+                dll_iterator_prev(&downit, &datahi);
+                upidx++;
+                downidx--;
+        } while (upidx < downidx);
+
+        dll_iterator_free(&upit);
+        dll_iterator_free(&downit);
+
+        return EDLLOK;
+}
+
 static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int lo, unsigned int hi)
 {
         unsigned int upidx, downidx, i;
@@ -379,7 +419,7 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
         upidx = lo;
         downidx = hi;
 
-        /* Create iterators and move to them to the respecitve lo hand hi
+        /* Create iterators and move to them to the respective lo hand hi
          * indexes */
         dll_iterator_new(&upit, list);
         dll_iterator_new(&downit, list);
@@ -443,6 +483,9 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                         break;
                 }
         }
+
+        dll_iterator_free(&upit);
+        dll_iterator_free(&downit);
 
         /* Recurse the two partitions that have been created */
         if (lo != downidx)

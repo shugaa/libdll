@@ -324,6 +324,46 @@ static void test_indexof(void)
     CU_ASSERT(rc == EDLLOK);
 }
 
+/* Test dll_reverse() functionality  */
+static void test_reverse(void) 
+{
+    int rc, i;
+    dll_list_t list;
+    void *data = NULL;
+
+    rc = dll_init();
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_new(&list);
+    CU_ASSERT(rc == EDLLOK);
+
+    /* Fill the list with numbers DLL_TEST_LISTSIZE..1 */
+    for(i=0;i<DLL_TEST_LISTSIZE;i++) {
+        rc = dll_append(&list, &data, sizeof(int));
+        CU_ASSERT(rc == EDLLOK);
+
+        if (rc == EDLLOK)
+            *((int*)data) = DLL_TEST_LISTSIZE-i;
+    }
+
+    /* Sort the list */
+    rc = dll_reverse(&list);
+    CU_ASSERT(rc == EDLLOK);
+
+    /* Make sure the list is in right order now */
+    for(i=0;i<DLL_TEST_LISTSIZE;i++) {
+        rc = dll_get(&list, &data, (unsigned int)i);
+        CU_ASSERT(rc == EDLLOK);
+        CU_ASSERT(*((int*)data) == i+1);
+    }
+
+    rc = dll_clear(&list);
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_close();
+    CU_ASSERT(rc == EDLLOK);
+}
+
 /* Test dll_sort() functionality  */
 static void test_sort(void) 
 {
@@ -488,6 +528,11 @@ int main(int argc, char *argv[])
         goto finish;
     }
     cu_test = CU_ADD_TEST(cu_suite01, test_indexof);
+    if (cu_test == NULL) {
+        ret = 3;
+        goto finish;
+    }
+    cu_test = CU_ADD_TEST(cu_suite01, test_reverse);
     if (cu_test == NULL) {
         ret = 3;
         goto finish;

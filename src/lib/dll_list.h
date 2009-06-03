@@ -204,6 +204,16 @@ int dll_get(dll_list_t* list, void** data, unsigned int position);
  */
 int dll_count(dll_list_t* list, unsigned int* count);
 
+/** Reverse a list
+ *
+ * @param list       Pointer to the list
+ *
+ * @return EDLLOK    No errors occured
+ * @return EDLLINV   An invalid argument has been passed
+ * @return EDLLERROR Something went wrong
+ */
+int dll_reverse(dll_list_t *list);
+
 /** Sort a doubly linked list
  * This implementation uses quicksort which is fast and in-place 
  *
