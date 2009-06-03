@@ -71,16 +71,16 @@ typedef struct dll_iterator dll_iterator_t;
 
 struct dll_list
 {
-    unsigned int count;
-    dll_item_t* first;
-    dll_item_t* last;
+        unsigned int count;
+        dll_item_t* first;
+        dll_item_t* last;
 };
 
 struct dll_iterator
 {
-    int flags;
-    dll_item_t* item;
-    dll_list_t* list;
+        int flags;
+        dll_item_t* item;
+        dll_list_t* list;
 };
 
 /** Comparator function prototype */
