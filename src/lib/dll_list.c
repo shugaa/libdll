@@ -315,6 +315,8 @@ int dll_count(dll_list_t* list, unsigned int* count)
 {
         if (!list)
                 return EDLLINV;
+        if (!count)
+                return EDLLINV;
 
         *count = list->count;
 
