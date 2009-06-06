@@ -114,6 +114,8 @@ window.onload = initDynSections;
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="dll__list_8h.html#e7501c08352f79b9cca63bfa70489d67">dll_count</a> (dll_list_t *list, unsigned int *count)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="dll__list_8h.html#01899b07662d09b40735a592a3866939">dll_deepcopy</a> (dll_list_t *from, dll_list_t *to, size_t datasize)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="dll__list_8h.html#8c26f219b978d79c7c995c3c4e7def2a">dll_reverse</a> (dll_list_t *list)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="dll__list_8h.html#2a2017155333735ff4b135e184a52dbc">dll_sort</a> (dll_list_t *list, <a class="el" href="dll__list_8h.html#fc0a31bc74826a8c4870b604d723fc88">dll_fctcompare_t</a> compar)</td></tr>
@@ -539,6 +541,52 @@ EDLLERROR Something went wrong </dd></dl>
 
 </div>
 </div><p>
+<a class="anchor" name="01899b07662d09b40735a592a3866939"></a><!-- doxytag: member="dll_list.h::dll_deepcopy" ref="01899b07662d09b40735a592a3866939" args="(dll_list_t *from, dll_list_t *to, size_t datasize)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int dll_deepcopy           </td>
+          <td>(</td>
+          <td class="paramtype">dll_list_t *&nbsp;</td>
+          <td class="paramname"> <em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dll_list_t *&nbsp;</td>
+          <td class="paramname"> <em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&nbsp;</td>
+          <td class="paramname"> <em>datasize</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Make a deep copy of a list<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>from</em>&nbsp;</td><td>List to be copied from </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>to</em>&nbsp;</td><td>List instance to be copied to (needs to be initialised and empty) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>datasize</em>&nbsp;</td><td>Size (in bytes) of the data items in from</td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>EDLLOK No errors occured <p>
+EDLLINV An invalid argument has been passed <p>
+EDLLERROR Something went wrong </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="8c26f219b978d79c7c995c3c4e7def2a"></a><!-- doxytag: member="dll_list.h::dll_reverse" ref="8c26f219b978d79c7c995c3c4e7def2a" args="(dll_list_t *list)" -->
 <div class="memitem">
 <div class="memproto">
@@ -810,7 +858,7 @@ EDLLERROR Something went wrong </dd></dl>
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Thu Jun 4 01:00:23 2009 for libdll by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Jun 6 19:59:22 2009 for libdll by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.9 </small></address>
 </body>
