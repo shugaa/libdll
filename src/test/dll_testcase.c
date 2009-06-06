@@ -228,6 +228,57 @@ static void test_extend(void)
     CU_ASSERT(rc == EDLLOK);
 }
 
+/* Test dll_deepcopy() functionality  */
+static void test_deepcopy(void) 
+{
+    int rc, i;
+    unsigned int count;
+    dll_list_t from, to;
+    void *data = NULL;
+
+    rc = dll_init();
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_new(&from);
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_new(&to);
+    CU_ASSERT(rc == EDLLOK);
+
+    /* Fill the first list with numbers 1..DLL_TEST_LISTSIZE */
+    for(i=0;i<DLL_TEST_LISTSIZE;i++) {
+        rc = dll_append(&from, &data, sizeof(int));
+        CU_ASSERT(rc == EDLLOK);
+
+        if (rc == EDLLOK)
+            *((int*)data) = i+1;
+    }
+
+    /* Make a deep copy of from */
+    rc = dll_deepcopy(&from, &to, sizeof(int));
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_count(&to, &count);
+    CU_ASSERT(rc == EDLLOK);
+    CU_ASSERT(count == DLL_TEST_LISTSIZE);
+
+    /* Read back and check for consistency */
+    for(i=0;i<DLL_TEST_LISTSIZE;i++) {
+        rc = dll_get(&to, &data, (unsigned int)i);
+        CU_ASSERT(rc == EDLLOK);
+        CU_ASSERT(*((int*)data) == i+1);
+    }
+
+    rc = dll_clear(&from);
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_clear(&to);
+    CU_ASSERT(rc == EDLLOK);
+
+    rc = dll_close();
+    CU_ASSERT(rc == EDLLOK);
+}
+
 /* Test dll_remove() functionality  */
 static void test_remove(void) 
 {
@@ -518,6 +569,11 @@ int main(int argc, char *argv[])
         goto finish;
     }
     cu_test = CU_ADD_TEST(cu_suite01, test_extend);
+    if (cu_test == NULL) {
+        ret = 3;
+        goto finish;
+    }
+    cu_test = CU_ADD_TEST(cu_suite01, test_deepcopy);
     if (cu_test == NULL) {
         ret = 3;
         goto finish;

@@ -44,7 +44,6 @@
 #define _DLL_LIST_H
 
 #include <stdio.h>
-#include <stdlib.h>
 
 /* ######################################################################### */
 /*                            TODO / Notes                                   */
@@ -203,6 +202,18 @@ int dll_get(dll_list_t* list, void** data, unsigned int position);
  * @return EDLLERROR Something went wrong
  */
 int dll_count(dll_list_t* list, unsigned int* count);
+
+/** Make a deep copy of a list
+ *
+ * @param from       List to be copied from
+ * @param to         List instance to be copied to (needs to be initialised and empty)
+ * @param datasize   Size (in bytes) of the data items in from
+ *
+ * @return EDLLOK    No errors occured
+ * @return EDLLINV   An invalid argument has been passed
+ * @return EDLLERROR Something went wrong
+ */
+int dll_deepcopy(dll_list_t *from, dll_list_t *to, size_t datasize);
 
 /** Reverse a list
  *

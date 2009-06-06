@@ -26,6 +26,9 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <string.h>     /* memcpy() */
+#include <stdlib.h>     /* malloc() / free() */
+
 #include "dll_list.h"
 #include "dll_list_prv.h"
 
@@ -43,8 +46,9 @@
 static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int lo, unsigned int hi);
 
 /* Reimplement these for custom memory management */
-static void *dll_mem_alloc(size_t size);
-static void dll_mem_free(void *ptr);
+static void *dll_memalloc(size_t size);
+static void dll_memfree(void *ptr);
+static void *dll_memcpy(void *dest, const void *src, size_t n);
 
 /* ######################################################################### */
 /*                           Implementation                                  */
@@ -88,8 +92,8 @@ int dll_clear(dll_list_t* list)
                  * freed */
                 itemnext = itemcurrent->next;
 
-                dll_mem_free(itemcurrent->data);
-                dll_mem_free(itemcurrent);
+                dll_memfree(itemcurrent->data);
+                dll_memfree(itemcurrent);
 
                 itemcurrent = itemnext;
         }
@@ -111,11 +115,11 @@ int dll_append(dll_list_t* list, void** data, size_t datasize)
                 return EDLLINV;
 
         /* Make a new item */
-        if ((itemnew = (dll_item_t*)dll_mem_alloc(sizeof(dll_item_t))) == NULL)
+        if ((itemnew = (dll_item_t*)dll_memalloc(sizeof(dll_item_t))) == NULL)
                 return EDLLNOMEM;
 
-        if ((itemnew->data = dll_mem_alloc(datasize)) == NULL) {
-                dll_mem_free(itemnew);
+        if ((itemnew->data = dll_memalloc(datasize)) == NULL) {
+                dll_memfree(itemnew);
                 return EDLLNOMEM;
         }
 
@@ -197,12 +201,12 @@ int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int posi
         }
 
         /* Create a new item */
-        if ((itemnew = (dll_item_t*)dll_mem_alloc(sizeof(dll_item_t))) == NULL) {
+        if ((itemnew = (dll_item_t*)dll_memalloc(sizeof(dll_item_t))) == NULL) {
                 return EDLLNOMEM;
         }
 
-        if ((itemnew->data = dll_mem_alloc(datasize)) == NULL) {
-                dll_mem_free(itemnew);
+        if ((itemnew->data = dll_memalloc(datasize)) == NULL) {
+                dll_memfree(itemnew);
                 return EDLLNOMEM;
         }
 
@@ -275,9 +279,9 @@ int dll_remove(dll_list_t* list, unsigned int position)
 
         /* Free the item */
         if (itemseek->data != NULL)
-                dll_mem_free(itemseek->data);
+                dll_memfree(itemseek->data);
 
-        dll_mem_free(itemseek);
+        dll_memfree(itemseek);
 
         list->count--;
 
@@ -313,6 +317,38 @@ int dll_count(dll_list_t* list, unsigned int* count)
                 return EDLLINV;
 
         *count = list->count;
+
+        return EDLLOK;
+}
+
+int dll_deepcopy(dll_list_t *from, dll_list_t *to, size_t datasize)
+{
+        int rc;
+        dll_iterator_t it;
+        void *datafrom, *datato;
+
+        if (!from)
+                return EDLLINV;
+        if (!to)
+                return EDLLINV;
+        if (to->count != 0)
+                return EDLLINV;
+        if (datasize < 1)
+                return EDLLINV;
+
+        if (from->count == 0)
+                return EDLLOK;
+
+        rc = dll_iterator_new(&it, from);
+        if (rc != EDLLOK)
+                return EDLLERROR;
+
+        while (dll_iterator_next(&it, &datafrom) == EDLLOK) {
+                dll_append(to, &datato, datasize);
+                dll_memcpy(datato, datafrom, datasize);
+        }
+
+        dll_iterator_free(&it);
 
         return EDLLOK;
 }
@@ -496,13 +532,18 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
         return EDLLOK;
 }
 
-static void *dll_mem_alloc(size_t size)
+static void *dll_memalloc(size_t size)
 {
         return malloc(size);
 }
 
-static void dll_mem_free(void *ptr)
+static void dll_memfree(void *ptr)
 {
         free(ptr);
+}
+
+static void *dll_memcpy(void *dest, const void *src, size_t n)
+{
+        return memcpy(dest, src, n);
 }
 
