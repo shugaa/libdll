@@ -367,8 +367,10 @@ int dll_sort(dll_list_t* list, dll_fctcompare_t compar)
 
 int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsigned int *index)
 {
+        int rc = EDLLERROR;
         unsigned int i;
-        dll_item_t *itemseek = NULL;
+        dll_iterator_t it;
+        void *data;
 
         if (!list)
                 return EDLLINV;
@@ -376,21 +378,21 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
                 return EDLLINV;
 
         i = 0;
-        itemseek = list->first;
-        do
-        {
-                if (compar(itemseek->data, cmpitem) == 0) {
-                        if (index != NULL)
-                                *index = i;
+        dll_iterator_new(&it, list);
+        while(dll_iterator_next(&it, &data) == EDLLOK) {
+                 if (compar(data, cmpitem) == 0) {
+                        rc = EDLLOK;
+                        break;
+                 }
 
-                        return EDLLOK;
-                }
+                 i++;
+        }
+        dll_iterator_free(&it);
 
-                itemseek = itemseek->next;
-                i++;
-        } while (itemseek != NULL);
+        if ((rc == EDLLOK) && (index != NULL))
+                *index = i;
 
-        return EDLLERROR;
+        return rc;
 }
 
 int dll_reverse(dll_list_t *list)
