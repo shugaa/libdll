@@ -98,7 +98,7 @@ int dll_init(void);
  */
 int dll_close(void);
 
-/** Create a new doubly-linked list instance
+/** Initialize a doubly-linked list instance
  *
  * @param list       Pointer to a dll_list_t to be initialized
  *
@@ -109,8 +109,9 @@ int dll_new(dll_list_t* list);
 
 /** Clear all items from the linked list
  *
- * Note: Even though a list has been cleared, you will still need to free it in
- * order to free any resources eventually being used by the list. 
+ * This will free each dll_item_t container in the list and the client data
+ * contained in it. It is vital to use this function for cleaning up lists when
+ * you're done using them, otherwise you will leak memory.
  *
  * @param list       Pointer to the list
  *
@@ -134,8 +135,7 @@ int dll_append(dll_list_t* list, void** data, size_t datasize);
 
 /** Extend a list with another one
  *
- * Note: lext will be an empty list afterwards, meaning it does not contain
- * any items. However it still needs to be freed of course.
+ * Note: lext will be an empty list afterwards.
  *
  * @param list       Pointer to the list to be extended
  * @param lext       Pointer to extension list
@@ -249,10 +249,10 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
  * vice versa occured upon a call to dll_iterator_next() or dll_iterator_prev()
  * the status code EDLLTILT is returned.
  *  
- * Using an iterator to traverse a list should be faster then getting each 
- * item using dll_get() since it's not necessary anymore to walk from element
- * 0 to the requested element multiple times. The next element is always just 
- * a reference away.
+ * Using an iterator to traverse a list is a lot faster then getting each item
+ * using dll_get() since it's not necessary anymore to walk from element 0 to
+ * the requested element multiple times. The next element is always just a
+ * reference away.
  *
  * @param iterator   Pointer to a dll_iterator_t to be initialized 
  * @param list       Pointer to dll_list_t for which the iterator is to be created
