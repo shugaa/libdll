@@ -350,8 +350,6 @@ int dll_deepcopy(dll_list_t *from, dll_list_t *to, size_t datasize)
                 dll_memcpy(datato, datafrom, datasize);
         }
 
-        dll_iterator_free(&it);
-
         return EDLLOK;
 }
 
@@ -387,7 +385,6 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
 
                  i++;
         }
-        dll_iterator_free(&it);
 
         if ((rc == EDLLOK) && (index != NULL))
                 *index = i;
@@ -428,9 +425,6 @@ int dll_reverse(dll_list_t *list)
                 upidx++;
                 downidx--;
         } while (upidx < downidx);
-
-        dll_iterator_free(&upit);
-        dll_iterator_free(&downit);
 
         return EDLLOK;
 }
@@ -523,9 +517,6 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                         break;
                 }
         }
-
-        dll_iterator_free(&upit);
-        dll_iterator_free(&downit);
 
         /* Recurse the two partitions that have been created */
         if (lo != downidx)

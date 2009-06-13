@@ -120,16 +120,3 @@ int dll_iterator_prev(dll_iterator_t* iterator, void** data)
         return ret;
 }
 
-int dll_iterator_free(dll_iterator_t* iterator)
-{   
-        if (!iterator)
-                return EDLLINV;
-
-        /* Set some reasonable values */
-        iterator->flags = 0;
-        iterator->list = NULL;
-        iterator->item = NULL;
-
-        return EDLLOK;
-}
-

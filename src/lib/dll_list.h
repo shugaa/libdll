@@ -107,16 +107,6 @@ int dll_close(void);
  */
 int dll_new(dll_list_t* list);
 
-/** Free all resources in use by a doubly-linked list
- *
- * @param list       Pointer to the list
- *
- * @return EDLLOK    No errors occured
- * @return EDLLINV   An invalid argument has been passed
- * @return EDLLERROR Something went wrong
- */
-int dll_free(dll_list_t* list);
-
 /** Clear all items from the linked list
  *
  * Note: Even though a list has been cleared, you will still need to free it in
@@ -296,15 +286,5 @@ int dll_iterator_next(dll_iterator_t* iterator, void** data);
  * @return EDLLERROR Something went wrong
  */
 int dll_iterator_prev(dll_iterator_t* iterator, void** data);
-
-/** Free any resources in use by a previously allocated iterator
- *
- * @param iterator   The iterator to be freed
- *
- * @return EDLLOK    No errors occured
- * @return EDLLINV   An invalid argument has been passed
- * @return EDLLERROR Something went wrong
- */
-int dll_iterator_free(dll_iterator_t* iterator);
 
 #endif /* _DLL_LIST_H */

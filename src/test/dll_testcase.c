@@ -489,9 +489,6 @@ static void test_iterator(void)
     }
     CU_ASSERT(rc == EDLLTILT);
 
-    rc = dll_iterator_free(&it);
-    CU_ASSERT(rc == EDLLOK);
-
     /* Iterate backward */
     rc = dll_iterator_new(&it, &list);
     CU_ASSERT(rc == EDLLOK);
@@ -502,9 +499,6 @@ static void test_iterator(void)
         i--;
     }
     CU_ASSERT(rc == EDLLTILT);
-
-    rc = dll_iterator_free(&it);
-    CU_ASSERT(rc == EDLLOK);
 
     rc = dll_clear(&list);
     CU_ASSERT(rc == EDLLOK);
