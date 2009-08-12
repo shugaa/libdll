@@ -447,7 +447,7 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
          * first > last
          */
         if (hi <= lo)
-                return EDLLOK;
+            return EDLLOK;
 
         /* Up and down 'pointers' are lo and hi initially */
         upidx = lo;
@@ -458,13 +458,23 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
         dll_iterator_new(&upit, list);
         dll_iterator_new(&downit, list);
 
-        for (i=0;i<(lo+1);i++)
-                dll_iterator_next(&upit, &datalo);
-        for (i=0;i<(hi+1);i++)
-                dll_iterator_next(&downit, &datahi);
+        /* Check whether it's better to move the iterator up or down to reach
+         * the desired element. This improves sort speeds tremendously (cuts
+         * sort times in half on my machine). We might actually try to build an
+         * index array of the list or something just for sorting but for now
+         * this is fine with me. */
+        if (lo < (list->count/2))
+            for (i=0;i<(lo+1);i++) dll_iterator_next(&upit, &datalo);
+        else
+            for (i=0;i<(list->count-lo);i++) dll_iterator_prev(&upit, &datalo);
+
+        if (hi < (list->count/2))
+            for (i=0;i<(hi+1);i++) dll_iterator_next(&downit, &datahi);
+        else
+            for (i=0;i<(list->count-hi);i++) dll_iterator_prev(&downit, &datahi);
 
         /* lo is the pivot element. Beware: Client code should never use
-         * iterator instance internals! */
+         * iterator instance internals! Do not take this as a good example. */
         pivotitem = upit.item;
 
         for(;;) {

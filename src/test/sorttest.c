@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
         dll_new(&list);
         dll_new(&copy);
 
-        for(i=0;i<10;i++) {
+        for(i=0;i<20000;i++) {
                 dll_append(&list, (void**)&data, sizeof(int));
                 *data = (int)(((double)random()/(double)RAND_MAX)*1000.0);
         }
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
         dll_iterator_new(&it, &copy);
         while(dll_iterator_next(&it, (void**)&data) == EDLLOK) {
-                printf("data: %d\n", *data);
+                //printf("data: %d\n", *data);
         }
 
         dll_clear(&list);

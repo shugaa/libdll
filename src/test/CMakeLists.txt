@@ -30,9 +30,13 @@ set(testappSrcs
     dll_testcase.c)
 
 add_executable(dlltest ${testappSrcs})
+add_executable(sorttest sorttest.c)
  
 target_link_libraries(dlltest 
     dll
     cunit)
+
+target_link_libraries(sorttest
+    dll)
 
 install(TARGETS dlltest DESTINATION bin)
