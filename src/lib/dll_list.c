@@ -290,8 +290,10 @@ int dll_remove(dll_list_t* list, unsigned int position)
 
 int dll_get(dll_list_t* list, void** data, unsigned int position)
 {
+        int rc;
         unsigned int i;
-        dll_item_t *itemseek = NULL;
+        void *itemseek = NULL;
+        dll_iterator_t it;
 
         /* Basic secrity precautions */
         if (!list)
@@ -301,12 +303,33 @@ int dll_get(dll_list_t* list, void** data, unsigned int position)
         if (position >= list->count)
                 return EDLLINV;
 
-        /* Seek to item position */
-        itemseek = list->first; 
-        for (i=0; i<position; i++)
-                itemseek = itemseek->next;
+        rc = dll_iterator_new(&it, list);
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
-        *data = itemseek->data;
+        /* Seek to item position. Depending on where the item is located in the
+         * list we move either up or down. Using an iterator will be slightly
+         * slower than accessing the list containers directly by their prev and
+         * next handles but it makes the code easier to read imho. */
+        if (position < (list->count/2)) {
+            for (i=0; i<(position+1); i++) {
+                rc = dll_iterator_next(&it, &itemseek);
+                if (rc != EDLLOK)
+                    break;
+            }
+        } else {
+            for (i=0; i<(list->count-position); i++)  {
+                rc = dll_iterator_prev(&it, &itemseek);
+                if (rc != EDLLOK)
+                    break;
+            } 
+        }
+
+        if (rc != EDLLOK)
+            return EDLLERROR;
+
+        /* Return the data in the item container */
+        *data = itemseek;
 
         return EDLLOK;
 }
@@ -346,9 +369,15 @@ int dll_deepcopy(dll_list_t *from, dll_list_t *to, size_t datasize)
                 return EDLLERROR;
 
         while (dll_iterator_next(&it, &datafrom) == EDLLOK) {
-                dll_append(to, &datato, datasize);
+                rc = dll_append(to, &datato, datasize);
+                if (rc != EDLLOK)
+                    break;
+
                 dll_memcpy(datato, datafrom, datasize);
         }
+
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         return EDLLOK;
 }
@@ -388,12 +417,15 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
 
         if ((rc == EDLLOK) && (index != NULL))
                 *index = i;
+        else
+                rc = EDLLERROR;
 
         return rc;
 }
 
 int dll_reverse(dll_list_t *list)
 {
+        int rc;
         unsigned int upidx, downidx;
         dll_iterator_t upit, downit;
         void *datahi, *datalo;
@@ -405,10 +437,19 @@ int dll_reverse(dll_list_t *list)
 
         /* Create up and down iterators and move them to the first and last item
          * respectively */
-        dll_iterator_new(&upit, list);
-        dll_iterator_new(&downit, list);
-        dll_iterator_next(&upit, &datalo);
-        dll_iterator_prev(&downit, &datahi);
+        rc = dll_iterator_new(&upit, list);
+        if (rc != EDLLOK)
+                return EDLLERROR;
+        rc = dll_iterator_new(&downit, list);
+        if (rc != EDLLOK)
+                return EDLLERROR;
+
+        rc = dll_iterator_next(&upit, &datalo);
+        if (rc != EDLLOK)
+                return EDLLERROR;
+        rc = dll_iterator_prev(&downit, &datahi);
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         upidx = 0;
         downidx = list->count-1;
@@ -420,17 +461,27 @@ int dll_reverse(dll_list_t *list)
                 upit.item->data = downit.item->data;
                 downit.item->data = datatmp;
 
-                dll_iterator_next(&upit, &datalo);
-                dll_iterator_prev(&downit, &datahi);
+                rc = dll_iterator_next(&upit, &datalo);
+                if (rc != EDLLOK)
+                    break;
+
+                rc = dll_iterator_prev(&downit, &datahi);
+                if (rc != EDLLOK)
+                    break;
+
                 upidx++;
                 downidx--;
         } while (upidx < downidx);
+
+        if (rc != EDLLOK)
+            return EDLLERROR;
 
         return EDLLOK;
 }
 
 static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int lo, unsigned int hi)
 {
+        int rc;
         unsigned int upidx, downidx, i;
         dll_iterator_t upit, downit;
         dll_item_t *pivotitem;
@@ -455,8 +506,12 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
 
         /* Create iterators and move to them to the respective lo hand hi
          * indexes */
-        dll_iterator_new(&upit, list);
-        dll_iterator_new(&downit, list);
+        rc = dll_iterator_new(&upit, list);
+        if (rc != EDLLOK)
+                return EDLLERROR;
+        rc = dll_iterator_new(&downit, list);
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         /* Check whether it's better to move the iterator up or down to reach
          * the desired element. This improves sort speeds tremendously (cuts
@@ -464,14 +519,36 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
          * index array of the list or something just for sorting but for now
          * this is fine with me. */
         if (lo < (list->count/2))
-            for (i=0;i<(lo+1);i++) dll_iterator_next(&upit, &datalo);
+                for (i=0;i<(lo+1);i++) {
+                        rc = dll_iterator_next(&upit, &datalo);
+                        if (rc != EDLLOK)
+                                break;
+                }
         else
-            for (i=0;i<(list->count-lo);i++) dll_iterator_prev(&upit, &datalo);
+                for (i=0;i<(list->count-lo);i++) { 
+                        rc = dll_iterator_prev(&upit, &datalo);
+                        if (rc != EDLLOK)
+                                break;
+                }
+
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         if (hi < (list->count/2))
-            for (i=0;i<(hi+1);i++) dll_iterator_next(&downit, &datahi);
+                for (i=0;i<(hi+1);i++) {
+                        rc = dll_iterator_next(&downit, &datahi);
+                        if (rc != EDLLOK)
+                                break;
+                }
         else
-            for (i=0;i<(list->count-hi);i++) dll_iterator_prev(&downit, &datahi);
+                for (i=0;i<(list->count-hi);i++) {
+                        rc = dll_iterator_prev(&downit, &datahi);
+                        if (rc != EDLLOK)
+                                break;
+                }
+
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         /* lo is the pivot element. Beware: Client code should never use
          * iterator instance internals! Do not take this as a good example. */
@@ -489,9 +566,15 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                         if (compar(datalo, pivotitem->data) > 0)
                                 break;
 
-                        dll_iterator_next(&upit, &datalo);
+                        rc = dll_iterator_next(&upit, &datalo);
+                        if (rc != EDLLOK)
+                                break;
+
                         upidx++;
                 }
+
+                if (rc != EDLLOK)
+                        break;
 
                 /* Move down 'pointer' to an element <= pivot */
                 for(;;) {
@@ -502,9 +585,15 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                         if (compar(datahi, pivotitem->data) <= 0)
                                 break;
 
-                        dll_iterator_prev(&downit, &datahi);
+                        rc = dll_iterator_prev(&downit, &datahi);
+                        if (rc != EDLLOK)
+                                break;
+
                         downidx--;
                 }
+
+                if (rc != EDLLOK)
+                        break;
 
                 if (upidx < downidx) {
                         /* If the two pointers have not passed each other
@@ -528,11 +617,21 @@ static int dll_quicksort(dll_list_t* list, dll_fctcompare_t compar, unsigned int
                 }
         }
 
+        if (rc != EDLLOK)
+                return EDLLERROR;
+
         /* Recurse the two partitions that have been created */
         if (lo != downidx)
-                dll_quicksort(list, compar, lo, downidx-1);
+                rc = dll_quicksort(list, compar, lo, downidx-1);
+        
+        if (rc != EDLLOK)
+                return EDLLERROR;
+
         if (hi != downidx)
-                dll_quicksort(list, compar, downidx+1, hi);
+                rc = dll_quicksort(list, compar, downidx+1, hi);
+
+        if (rc != EDLLOK)
+                return EDLLERROR;
 
         return EDLLOK;
 }
