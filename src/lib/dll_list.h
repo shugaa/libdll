@@ -1,29 +1,23 @@
 /*
 * Copyright (c) 2008, Björn Rehm (bjoern@shugaa.de)
-* All rights reserved.
 * 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
 * 
-*  * Redistributions of source code must retain the above copyright notice, this
-*    list of conditions and the following disclaimer.
-*  * Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*  * Neither the name of the author nor the names of its contributors may be
-*    used to endorse or promote products derived from this software without
-*    specific prior written permission.
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
 * 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
 */
 
 /** @file dll_list.h
@@ -71,15 +65,15 @@ typedef struct dll_iterator dll_iterator_t;
 struct dll_list
 {
         unsigned int count;
-        dll_item_t* first;
-        dll_item_t* last;
+        dll_item_t *first;
+        dll_item_t *last;
 };
 
 struct dll_iterator
 {
         int flags;
-        dll_item_t* item;
-        dll_list_t* list;
+        dll_item_t *item;
+        dll_list_t *list;
 };
 
 /** Comparator function prototype */
@@ -89,15 +83,6 @@ typedef int(*dll_fctcompare_t)(const void*, const void*);
 /*                            Public interface                               */
 /* ######################################################################### */
 
-/** Initialise the DLL library. Should be called before using any other library
- * functions
- */
-int dll_init(void);
-
-/** Close the DLL library, free any resources in use by libdll.
- */
-int dll_close(void);
-
 /** Initialize a doubly-linked list instance
  *
  * @param list       Pointer to a dll_list_t to be initialized
@@ -105,7 +90,7 @@ int dll_close(void);
  * @return EDLLOK    No errors occured
  * @return EDLLERROR Something went wrong
  */
-int dll_new(dll_list_t* list);
+int dll_init(dll_list_t *list);
 
 /** Clear all items from the linked list
  *
@@ -119,7 +104,7 @@ int dll_new(dll_list_t* list);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_clear(dll_list_t* list);
+int dll_clear(dll_list_t *list);
 
 /** Append an item to the end of the list
  *
@@ -131,11 +116,9 @@ int dll_clear(dll_list_t* list);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_append(dll_list_t* list, void** data, size_t datasize);
+int dll_append(dll_list_t *list, void **data, size_t datasize);
 
 /** Extend a list with another one
- *
- * Note: lext will be an empty list afterwards.
  *
  * @param list       Pointer to the list to be extended
  * @param lext       Pointer to extension list
@@ -144,7 +127,7 @@ int dll_append(dll_list_t* list, void** data, size_t datasize);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_extend(dll_list_t* list, dll_list_t* lext);
+int dll_extend(dll_list_t *list, dll_list_t *lext);
 
 /** Insert a new item into the list at the specified position
  *
@@ -157,7 +140,7 @@ int dll_extend(dll_list_t* list, dll_list_t* lext);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int position);
+int dll_insert(dll_list_t *list, void **data, size_t datasize, unsigned int position);
 
 /** Remove a specific item from the list
  *
@@ -168,19 +151,20 @@ int dll_insert(dll_list_t* list, void** data, size_t datasize, unsigned int posi
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_remove(dll_list_t* list, unsigned int position);
+int dll_remove(dll_list_t *list, unsigned int position);
 
 /** Get an item from the list
  *
  * @param list       Pointer to the list
  * @param data       Where to store the reference to the specified item data
+ * @param datasize   Size of the data BLOB
  * @param position   Position in the list of the requested item
  *
  * @return EDLLOK    No errors occured
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_get(dll_list_t* list, void** data, unsigned int position);
+int dll_get(dll_list_t *list, void **data, size_t *datasize, unsigned int position);
 
 /** Get the current item count of the list
  *
@@ -191,19 +175,18 @@ int dll_get(dll_list_t* list, void** data, unsigned int position);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_count(dll_list_t* list, unsigned int* count);
+int dll_count(dll_list_t *list, unsigned int *count);
 
 /** Make a deep copy of a list
  *
  * @param from       List to be copied from
  * @param to         List instance to be copied to (needs to be initialised and empty)
- * @param datasize   Size (in bytes) of the data items in from
  *
  * @return EDLLOK    No errors occured
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_deepcopy(dll_list_t *from, dll_list_t *to, size_t datasize);
+int dll_deepcopy(dll_list_t *from, dll_list_t *to);
 
 /** Reverse a list
  *
@@ -225,7 +208,7 @@ int dll_reverse(dll_list_t *list);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_sort(dll_list_t* list, dll_fctcompare_t compar);
+int dll_sort(dll_list_t *list, dll_fctcompare_t compar);
 
 /** Returns the first occurence of the item which successfully compares to
  * 'cmpitem'
@@ -238,7 +221,7 @@ int dll_sort(dll_list_t* list, dll_fctcompare_t compar);
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong / Item not found
  */
-int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsigned int *index);
+int dll_indexof(dll_list_t *list, dll_fctcompare_t compar, void *cmpitem, unsigned int *index);
 
 /** Create a new doubly-linked list iterator instance
  *
@@ -261,30 +244,33 @@ int dll_indexof(dll_list_t* list, dll_fctcompare_t compar, void* cmpitem, unsign
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLERROR Something went wrong
  */
-int dll_iterator_new(dll_iterator_t* iterator, dll_list_t* list);
+int dll_iterator_init(dll_iterator_t *iterator, dll_list_t *list);
 
 /** Move the iterator to the next position
  *
  * @param iterator   The iterator which is to be moved to the next element
  * @param data       Storage for the reference to this item's data
+ * @param datasize   Size of the data BLOB
  *
  * @return EDLLOK    No errors occured
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLTILT  Iterator turnaround (jump from last to first item)
  * @return EDLLERROR Something went wrong
  */
-int dll_iterator_next(dll_iterator_t* iterator, void** data);
+int dll_iterator_next(dll_iterator_t *iterator, void **data, size_t *datasize);
 
 /** Move the iterator to the previous position
  *
  * @param iterator   The iterator which is to be moved to the next element
  * @param data       Storage for the reference to this item's data
+ * @param datasize   Size of the data BLOB
  *
  * @return EDLLOK    No errors occured
  * @return EDLLINV   An invalid argument has been passed
  * @return EDLLTILT  Iterator turnaround (jump from first to last item)
  * @return EDLLERROR Something went wrong
  */
-int dll_iterator_prev(dll_iterator_t* iterator, void** data);
+int dll_iterator_prev(dll_iterator_t *iterator, void **data, size_t *datasize);
 
 #endif /* _DLL_LIST_H */
+

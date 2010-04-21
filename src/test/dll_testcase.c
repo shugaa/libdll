@@ -1,29 +1,23 @@
 /*
 * Copyright (c) 2008, Björn Rehm (bjoern@shugaa.de)
-* All rights reserved.
 * 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
 * 
-*  * Redistributions of source code must retain the above copyright notice, this
-*    list of conditions and the following disclaimer.
-*  * Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*  * Neither the name of the author nor the names of its contributors may be
-*    used to endorse or promote products derived from this software without
-*    specific prior written permission.
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
 * 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
 */
 
 #include <stdio.h>
@@ -47,10 +41,7 @@ static void test_append(void)
     dll_list_t list;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers 1..20 */
@@ -64,15 +55,12 @@ static void test_append(void)
 
     /* Read back and check for consistency */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -84,10 +72,7 @@ static void test_insert(void)
     unsigned int count;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list by appending items */
@@ -104,7 +89,7 @@ static void test_insert(void)
 
     /* Read back and check for consistency */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
@@ -116,18 +101,18 @@ static void test_insert(void)
     if (rc == EDLLOK)
         *((int*)data) = 999;
 
-    rc = dll_get(&list, &data, 0);
+    rc = dll_get(&list, &data, NULL, 0);
     CU_ASSERT(rc == EDLLOK);
     CU_ASSERT(*((int*)data) == 1);
 
-    rc = dll_get(&list, &data, DLL_TEST_LISTSIZE/2);
+    rc = dll_get(&list, &data, NULL, DLL_TEST_LISTSIZE/2);
     CU_ASSERT(rc == EDLLOK);
     CU_ASSERT(*((int*)data) == 999);
 
     rc = dll_count(&list, &count);
     CU_ASSERT(rc == EDLLOK);
 
-    rc = dll_get(&list, &data, count-1);
+    rc = dll_get(&list, &data, NULL, count-1);
     CU_ASSERT(rc == EDLLOK);
     CU_ASSERT(*((int*)data) == DLL_TEST_LISTSIZE);
 
@@ -152,15 +137,12 @@ static void test_insert(void)
 
     /* Read back and check for consistency */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == DLL_TEST_LISTSIZE-i);
     }
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -172,13 +154,10 @@ static void test_extend(void)
     dll_list_t list, lext;
     void *data = NULL;
 
-    rc = dll_init();
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
-    rc = dll_new(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&lext);
+    rc = dll_init(&lext);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the first list with numbers 1..DLL_TEST_LISTSIZE/2 */
@@ -209,11 +188,11 @@ static void test_extend(void)
 
     rc = dll_count(&lext, &count);
     CU_ASSERT(rc == EDLLOK);
-    CU_ASSERT(count == 0);
+    CU_ASSERT(count == DLL_TEST_LISTSIZE/2);
 
     /* Read back and check for consistency */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
@@ -222,9 +201,6 @@ static void test_extend(void)
     CU_ASSERT(rc == EDLLOK);
 
     rc = dll_clear(&lext);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -236,13 +212,10 @@ static void test_deepcopy(void)
     dll_list_t from, to;
     void *data = NULL;
 
-    rc = dll_init();
+    rc = dll_init(&from);
     CU_ASSERT(rc == EDLLOK);
 
-    rc = dll_new(&from);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&to);
+    rc = dll_init(&to);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the first list with numbers 1..DLL_TEST_LISTSIZE */
@@ -255,7 +228,7 @@ static void test_deepcopy(void)
     }
 
     /* Make a deep copy of from */
-    rc = dll_deepcopy(&from, &to, sizeof(int));
+    rc = dll_deepcopy(&from, &to);
     CU_ASSERT(rc == EDLLOK);
 
     rc = dll_count(&to, &count);
@@ -264,7 +237,7 @@ static void test_deepcopy(void)
 
     /* Read back and check for consistency */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&to, &data, (unsigned int)i);
+        rc = dll_get(&to, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
@@ -273,9 +246,6 @@ static void test_deepcopy(void)
     CU_ASSERT(rc == EDLLOK);
 
     rc = dll_clear(&to);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -287,10 +257,7 @@ static void test_remove(void)
     dll_list_t list;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers 1..DLL_TEST_LISTSIZE */
@@ -323,19 +290,16 @@ static void test_remove(void)
     CU_ASSERT(count == (DLL_TEST_LISTSIZE-3));
 
     /* First item must be 2 now */
-    rc = dll_get(&list, &data, (unsigned int)0);
+    rc = dll_get(&list, &data, NULL, (unsigned int)0);
     CU_ASSERT(rc == EDLLOK);
     CU_ASSERT(*((int*)data) == 2);
 
     /* Last item must be DLL_TEST_LISTSIZE-1 */
-    rc = dll_get(&list, &data, count-1);
+    rc = dll_get(&list, &data, NULL, count-1);
     CU_ASSERT(rc == EDLLOK);
     CU_ASSERT(*((int*)data) == (DLL_TEST_LISTSIZE-1));
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -347,10 +311,7 @@ static void test_indexof(void)
     dll_list_t list;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers 1..DLL_TEST_LISTSIZE */
@@ -370,9 +331,6 @@ static void test_indexof(void)
 
     rc = dll_clear(&list);
     CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
-    CU_ASSERT(rc == EDLLOK);
 }
 
 /* Test dll_reverse() functionality  */
@@ -382,10 +340,7 @@ static void test_reverse(void)
     dll_list_t list;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers DLL_TEST_LISTSIZE..1 */
@@ -403,15 +358,12 @@ static void test_reverse(void)
 
     /* Make sure the list is in right order now */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -422,10 +374,7 @@ static void test_sort(void)
     dll_list_t list;
     void *data = NULL;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers DLL_TEST_LISTSIZE..1 */
@@ -443,15 +392,12 @@ static void test_sort(void)
 
     /* Make sure the list is in right order now */
     for(i=0;i<DLL_TEST_LISTSIZE;i++) {
-        rc = dll_get(&list, &data, (unsigned int)i);
+        rc = dll_get(&list, &data, NULL, (unsigned int)i);
         CU_ASSERT(rc == EDLLOK);
         CU_ASSERT(*((int*)data) == i+1);
     }
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -462,11 +408,9 @@ static void test_iterator(void)
     dll_list_t list;
     dll_iterator_t it;
     void *data = NULL;
+    size_t datasize;
 
-    rc = dll_init();
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_new(&list);
+    rc = dll_init(&list);
     CU_ASSERT(rc == EDLLOK);
 
     /* Fill the list with numbers DLL_TEST_LISTSIZE..1 */
@@ -479,31 +423,30 @@ static void test_iterator(void)
     }
 
     /* Iterate forward */
-    rc = dll_iterator_new(&it, &list);
+    rc = dll_iterator_init(&it, &list);
     CU_ASSERT(rc == EDLLOK);
     
     i = 1;
-    while ((rc = dll_iterator_next(&it, &data)) == EDLLOK) {
+    while ((rc = dll_iterator_next(&it, &data, &datasize)) == EDLLOK) {
         CU_ASSERT(i == *((int*)data));
+        CU_ASSERT(datasize == sizeof(int));
         i++;
     }
     CU_ASSERT(rc == EDLLTILT);
 
     /* Iterate backward */
-    rc = dll_iterator_new(&it, &list);
+    rc = dll_iterator_init(&it, &list);
     CU_ASSERT(rc == EDLLOK);
     
     i = DLL_TEST_LISTSIZE;
-    while ((rc = dll_iterator_prev(&it, &data)) == EDLLOK) {
+    while ((rc = dll_iterator_prev(&it, &data, &datasize)) == EDLLOK) {
         CU_ASSERT(i == *((int*)data));
+        CU_ASSERT(datasize == sizeof(int));
         i--;
     }
     CU_ASSERT(rc == EDLLTILT);
 
     rc = dll_clear(&list);
-    CU_ASSERT(rc == EDLLOK);
-
-    rc = dll_close();
     CU_ASSERT(rc == EDLLOK);
 }
 
@@ -634,3 +577,4 @@ finish:
     CU_cleanup_registry();
     return ret;
 }
+
